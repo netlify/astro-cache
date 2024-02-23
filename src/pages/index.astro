@@ -3,7 +3,7 @@ import { Image } from "@unpic/astro";
 const { slug } = Astro.params;
 
 const query = `{
-  allArticles(first: 20) {
+  allArticles(first: 100) {
     slug
     title
 	image {
