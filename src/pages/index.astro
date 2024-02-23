@@ -68,7 +68,7 @@ const { allArticles } = body.data;
   <body>
     <ul>
       {
-        allArticles.map((article) => (
+        allArticles.map((article: any) => (
           <li>
             <a href={`/${article.slug}`}>
               <Image
