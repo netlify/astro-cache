@@ -1,0 +1,57 @@
+---
+import { Image } from "@unpic/astro";
+const { slug } = Astro.params;
+
+const query = `{
+  article(filter: {slug: {eq: "${slug}"}}) {
+    body
+    id
+    slug
+    title
+    updatedAt
+    image {
+      url
+      colors {
+        cssRgb
+      }
+      alt
+    }
+  }
+}`;
+console.log(query);
+const response = await fetch(`https://graphql.datocms.com/`, {
+  method: "POST",
+  body: JSON.stringify({ query }),
+  headers: {
+    "Content-type": "application/json",
+    Authorization: `Bearer ${import.meta.env.DATO_TOKEN}`,
+  },
+});
+const body = await response.json();
+console.log(JSON.stringify({ body }, null, 2));
+
+const { article } = body.data;
+
+if (!article) {
+  return Astro.redirect("/404");
+}
+
+Astro.response.headers.set("netlify-cdn-cache-control", "s-maxage=31536000");
+Astro.response.headers.set("netlify-cdn-cache-control", "s-maxage=31536000");
+---
+
+<html>
+  <head>
+    <title>{slug}</title>
+  </head>
+  <body>
+    <h1>{slug}</h1>
+    <Image
+      src={article.image.url}
+      alt={article.image.alt}
+      width={800}
+      height={600}
+    />
+    <p>{article.body}</p>
+  </body>
+</html>
