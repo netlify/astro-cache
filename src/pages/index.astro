@@ -8,6 +8,10 @@ const query = `{
     title
 	image {
 		url
+		colors {
+        cssRgb
+      }
+      alt
 	}
   }
 }`;
@@ -74,6 +78,7 @@ const { allArticles } = body.data;
               <Image
                 src={article.image.url}
                 alt={article.image.alt}
+                background={article.image.colors[0].cssRgb}
                 width={200}
                 height={200}
               />
