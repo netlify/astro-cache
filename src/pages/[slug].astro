@@ -33,22 +33,36 @@ console.log(JSON.stringify({ body }, null, 2));
 const { article } = body.data;
 
 if (!article) {
-  return Astro.redirect("/404");
+  return new Response("custom 404 html content", {
+    status: 404,
+  });
 }
 
 Astro.response.headers.set("netlify-cdn-cache-control", "s-maxage=31536000");
-Astro.response.headers.set("netlify-cdn-cache-control", "s-maxage=31536000");
+Astro.response.headers.set("netlify-cache-tag", article.id);
 ---
 
 <html>
   <head>
     <title>{slug}</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+      h1 {
+        color: #333;
+      }
+      p {
+        color: #666;
+      }
+    </style>
   </head>
   <body>
-    <h1>{slug}</h1>
+    <h1>{article.title}</h1>
     <Image
       src={article.image.url}
       alt={article.image.alt}
+      background={article.image.colors[0].cssRgb}
       width={800}
       height={600}
     />
